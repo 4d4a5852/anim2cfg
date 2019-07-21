@@ -31,6 +31,10 @@ import bpy_extras
 from bpy.utils import register_class, unregister_class
 from math import degrees
 from mathutils import Matrix, Vector
+import re
+
+def sanitize_classname(text):
+    return re.sub('[^A-Za-z0-9_]', '_', text)
 
 def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                 frame_start=0, frame_end=0, min_value=0.1, max_value=1.0,
@@ -65,7 +69,7 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                 dn = d.normalized()
                 curr_min_value = min_value + i*(max_value - min_value)/(len(frames) - 1)
                 curr_max_value = min_value + (i + 1)*(max_value - min_value)/(len(frames) - 1)
-                cfg.write(f"class {selection_name}_trans_{i} {{\n"
+                cfg.write(f"class {sanitize_classname(selection_name)}_trans_{i} {{\n"
                           f"    type       = direct;\n"
                           f"    source     = {source_name};\n"
                           f"    selection  = {selection_name};\n"
@@ -76,7 +80,7 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                           f"    minValue   = {curr_min_value:.{precision}f};\n"
                           f"    maxValue   = {curr_max_value:.{precision}f};\n"
                           f"}};\n"
-                          f"class {selection_name}_rot_{i} {{\n"
+                          f"class {sanitize_classname(selection_name)}_rot_{i} {{\n"
                           f"    type       = direct;\n"
                           f"    source     = {source_name};\n"
                           f"    selection  = {selection_name};\n"
