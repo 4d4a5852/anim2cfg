@@ -38,7 +38,7 @@ def sanitize_classname(text):
 
 def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                 frame_start=0, frame_end=0, min_value=0.1, max_value=1.0,
-                precision=5):
+                precision=7):
     frames = range(frame_start, 1 + frame_end)
     last = None
     i = 0
@@ -138,7 +138,7 @@ class ANIM2CFG_OT_ModelCfgExport(bpy.types.Operator,
         name="Precision",
         description="Number of decimal places",
         min=0,
-        default=5)
+        default=7)
 
     def invoke(self, context, event):
         self.selection_name = bpy.context.active_object.name
