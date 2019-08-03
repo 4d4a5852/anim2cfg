@@ -16,7 +16,7 @@
 bl_info = {
     "name": "anim2cfg: Animation to model.cfg",
     "author": "4d4a5852",
-    "version": (0, 1, 0),
+    "version": (0, 1, 1),
     "blender": (2, 80, 0),
     "location": "File -> Export",
     "description": "Export animations to Arma 3 model.cfg",
