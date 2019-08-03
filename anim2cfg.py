@@ -64,9 +64,13 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                 q = (curr @ last.inverted()).to_quaternion()
                 d = p - last.to_translation()
                 length = d.length
-                if length == 0:
+                if round(length, precision) == 0:
                     d = Vector((1, 0, 0))
                 dn = d.normalized()
+                q_axis = q.axis.normalized()
+                q_angle = degrees(q.angle)
+                if round(q_angle, precision) == 0:
+                    q_axis = Vector((1, 0, 0))
                 curr_min_value = min_value + i*(max_value - min_value)/(len(frames) - 1)
                 curr_max_value = min_value + (i + 1)*(max_value - min_value)/(len(frames) - 1)
                 cfg.write(f"class {sanitize_classname(selection_name)}_trans_{i} {{\n"
@@ -85,8 +89,8 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                           f"    source     = {source_name};\n"
                           f"    selection  = {selection_name};\n"
                           f"    axisPos[]  = {{{p.x:.{precision}f}, {p.z:.{precision}f}, {p.y:.{precision}f}}};\n"
-                          f"    axisDir[]  = {{{q.axis.x:.{precision}f}, {q.axis.z:.{precision}f}, {q.axis.y:.{precision}f}}};\n"
-                          f"    angle      = {degrees(q.angle):.{precision}f};\n"
+                          f"    axisDir[]  = {{{q_axis.x:.{precision}f}, {q_axis.z:.{precision}f}, {q_axis.y:.{precision}f}}};\n"
+                          f"    angle      = {q_angle:.{precision}f};\n"
                           f"    axisOffset = 0;\n"
                           f"    minValue   = {curr_min_value:.{precision}f};\n"
                           f"    maxValue   = {curr_max_value:.{precision}f};\n"
