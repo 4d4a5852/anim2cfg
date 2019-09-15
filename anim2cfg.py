@@ -36,6 +36,9 @@ import re
 def sanitize_classname(text):
     return re.sub('[^A-Za-z0-9_]', '_', text)
 
+def escape_string(text):
+    return text.replace('"', '""')
+
 def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                 frame_start=0, frame_end=0, min_value=0.1, max_value=1.0,
                 precision=7):
@@ -73,28 +76,28 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                     q_axis = Vector((1, 0, 0))
                 curr_min_value = min_value + i*(max_value - min_value)/(len(frames) - 1)
                 curr_max_value = min_value + (i + 1)*(max_value - min_value)/(len(frames) - 1)
-                cfg.write(f"class {sanitize_classname(selection_name)}_trans_{i} {{\n"
-                          f"    type       = direct;\n"
-                          f"    source     = {source_name};\n"
-                          f"    selection  = {selection_name};\n"
-                          f"    axisPos[]  = {{0, 0, 0}};\n"
-                          f"    axisDir[]  = {{{dn.x:.{precision}f}, {dn.z:.{precision}f}, {dn.y:.{precision}f}}};\n"
-                          f"    angle      = 0;\n"
-                          f"    axisOffset = {length:.{precision}f};\n"
-                          f"    minValue   = {curr_min_value:.{precision}f};\n"
-                          f"    maxValue   = {curr_max_value:.{precision}f};\n"
-                          f"}};\n"
-                          f"class {sanitize_classname(selection_name)}_rot_{i} {{\n"
-                          f"    type       = direct;\n"
-                          f"    source     = {source_name};\n"
-                          f"    selection  = {selection_name};\n"
-                          f"    axisPos[]  = {{{p.x:.{precision}f}, {p.z:.{precision}f}, {p.y:.{precision}f}}};\n"
-                          f"    axisDir[]  = {{{q_axis.x:.{precision}f}, {q_axis.z:.{precision}f}, {q_axis.y:.{precision}f}}};\n"
-                          f"    angle      = {q_angle:.{precision}f};\n"
-                          f"    axisOffset = 0;\n"
-                          f"    minValue   = {curr_min_value:.{precision}f};\n"
-                          f"    maxValue   = {curr_max_value:.{precision}f};\n"
-                          f"}};\n")
+                cfg.write(f'class {sanitize_classname(selection_name)}_trans_{i} {{\n'
+                          f'    type       = "direct";\n'
+                          f'    source     = "{escape_string(source_name)}";\n'
+                          f'    selection  = "{escape_string(selection_name)}";\n'
+                          f'    axisPos[]  = {{0, 0, 0}};\n'
+                          f'    axisDir[]  = {{{dn.x:.{precision}f}, {dn.z:.{precision}f}, {dn.y:.{precision}f}}};\n'
+                          f'    angle      = 0;\n'
+                          f'    axisOffset = {length:.{precision}f};\n'
+                          f'    minValue   = {curr_min_value:.{precision}f};\n'
+                          f'    maxValue   = {curr_max_value:.{precision}f};\n'
+                          f'}};\n'
+                          f'class {sanitize_classname(selection_name)}_rot_{i} {{\n'
+                          f'    type       = "direct";\n'
+                          f'    source     = "{escape_string(source_name)}";\n'
+                          f'    selection  = "{escape_string(selection_name)}";\n'
+                          f'    axisPos[]  = {{{p.x:.{precision}f}, {p.z:.{precision}f}, {p.y:.{precision}f}}};\n'
+                          f'    axisDir[]  = {{{q_axis.x:.{precision}f}, {q_axis.z:.{precision}f}, {q_axis.y:.{precision}f}}};\n'
+                          f'    angle      = {q_angle:.{precision}f};\n'
+                          f'    axisOffset = 0;\n'
+                          f'    minValue   = {curr_min_value:.{precision}f};\n'
+                          f'    maxValue   = {curr_max_value:.{precision}f};\n'
+                          f'}};\n')
                 i += 1
             last = curr.copy()
     return (0, i)
