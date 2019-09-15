@@ -49,6 +49,9 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
         selection_name = obj.name
     if source_name == '':
         source_name = 'foobar'
+    sanitized_selection_name = sanitize_classname(selection_name)
+    escaped_selection_name = escape_string(selection_name)
+    escaped_source_name = escape_string(source_name)
     parent_object = None
     parent_matrix = Matrix()
     if parent_name != '':
@@ -76,10 +79,10 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                     q_axis = Vector((1, 0, 0))
                 curr_min_value = min_value + i*(max_value - min_value)/(len(frames) - 1)
                 curr_max_value = min_value + (i + 1)*(max_value - min_value)/(len(frames) - 1)
-                cfg.write(f'class {sanitize_classname(selection_name)}_trans_{i} {{\n'
+                cfg.write(f'class {sanitized_selection_name}_trans_{i} {{\n'
                           f'    type       = "direct";\n'
-                          f'    source     = "{escape_string(source_name)}";\n'
-                          f'    selection  = "{escape_string(selection_name)}";\n'
+                          f'    source     = "{escaped_source_name}";\n'
+                          f'    selection  = "{escaped_selection_name}";\n'
                           f'    axisPos[]  = {{0, 0, 0}};\n'
                           f'    axisDir[]  = {{{dn.x:.{precision}f}, {dn.z:.{precision}f}, {dn.y:.{precision}f}}};\n'
                           f'    angle      = 0;\n'
@@ -87,10 +90,10 @@ def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                           f'    minValue   = {curr_min_value:.{precision}f};\n'
                           f'    maxValue   = {curr_max_value:.{precision}f};\n'
                           f'}};\n'
-                          f'class {sanitize_classname(selection_name)}_rot_{i} {{\n'
+                          f'class {sanitized_selection_name}_rot_{i} {{\n'
                           f'    type       = "direct";\n'
-                          f'    source     = "{escape_string(source_name)}";\n'
-                          f'    selection  = "{escape_string(selection_name)}";\n'
+                          f'    source     = "{escaped_source_name}";\n'
+                          f'    selection  = "{escaped_selection_name}";\n'
                           f'    axisPos[]  = {{{p.x:.{precision}f}, {p.z:.{precision}f}, {p.y:.{precision}f}}};\n'
                           f'    axisDir[]  = {{{q_axis.x:.{precision}f}, {q_axis.z:.{precision}f}, {q_axis.y:.{precision}f}}};\n'
                           f'    angle      = {q_angle:.{precision}f};\n'
