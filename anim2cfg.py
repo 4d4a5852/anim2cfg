@@ -39,7 +39,10 @@ def sanitize_classname(text):
 def export_anim(file, obj, selection_name='', source_name='', parent_name='',
                 frame_start=0, frame_end=0, min_value=0.1, max_value=1.0,
                 precision=7):
-    frames = range(frame_start, 1 + frame_end)
+    if frame_start > frame_end:
+        frames = range(frame_start, frame_end - 1, -1)
+    else:
+        frames = range(frame_start, frame_end + 1)
     last = None
     i = 0
     if selection_name == '':
